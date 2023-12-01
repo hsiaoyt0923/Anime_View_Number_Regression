@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import psycopg2
 import password as pw
-import time
+
 
 
 def download_data(url: str) -> list[list]:
@@ -27,7 +27,6 @@ def download_data(url: str) -> list[list]:
         anime_episode = anime_info.select_one(
             '.theme-number').text.strip().replace('共', '').replace('集', '')
         anime_link = 'https://ani.gamer.com.tw/' + anime_info['href']
-        time.sleep(0.2)
         r1 = requests.get(anime_link, headers=headers)
         r1.encoding = 'utf8'
         detail_data = BeautifulSoup(r1.text, 'html.parser')
@@ -116,17 +115,35 @@ def insert_data(conn, infos: list[str], tags: list[str]) -> None:
 
 
 def fetch_data(sql: str) -> list[tuple]:
-	conn = psycopg2.connect(database=pw.DATABASE,
-                         user=pw.USER,
-                         password=pw.PASSWORD,
-                         host=pw.HOST,
-                         port=pw.PORT)
+    conn = psycopg2.connect(database=pw.DATABASE,
+                            user=pw.USER,
+                            password=pw.PASSWORD,
+                            host=pw.HOST,
+                            port=pw.PORT)
 
-	cursor = conn.cursor()
-	cursor.execute(sql)
-	rows = cursor.fetchall()
-	conn.close()
-	return rows
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+    conn.close()
+    return rows
+
+
+def last_page() -> int:
+    headers = {
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'}
+    response = requests.get(
+        'https://ani.gamer.com.tw/animeList.php?', headers=headers)
+    response.encoding = 'utf8'
+    if response.status_code == 200:
+        print(f'取得頁碼_訊息代號：{response.status_code}')
+    else:
+        print(f'取得頁碼_訊息代號：{response.status_code}')
+
+    index = BeautifulSoup(response.text, 'html.parser')
+    page_number = index.select_one('.page_number > a:last-child').text
+    page_number = int(page_number)
+    return page_number
+
 
 def main():
     # 與資料庫建立連接
@@ -139,31 +156,20 @@ def main():
     create_table(conn)
 
     # 取得動畫列表最後一頁的頁碼
-    headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'}
-    response = requests.get('https://ani.gamer.com.tw/animeList.php?', headers=headers)
-    response.encoding = 'utf8'
-    if response.status_code == 200:
-        print(f'請求成功：{response.status_code}')
-    else:
-        print(f'請求失敗：{response.status_code}')
+    page_number = last_page()
 
-    index = BeautifulSoup(response.text, 'html.parser')
-    last_page_number = index.select_one('.page_number > a:last-child').text
-    last_page_number = int(last_page_number)
-    
     # 開始逐頁下載資料
     n = 0
-    for i in range(last_page_number):
+    for i in range(page_number):
         url = f'https://ani.gamer.com.tw/animeList.php?page={i+1}'
         anime_data = download_data(url)
         for infos_tags in anime_data:
             insert_data(conn, infos=infos_tags[0], tags=infos_tags[1])
         n += 1
-        print(n)
-    
+        print(f'第{n}頁下載完畢')
+
     # 關閉資料庫
     conn.close()
-
 
 
 if __name__ == '__main__':
