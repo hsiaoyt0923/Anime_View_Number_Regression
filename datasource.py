@@ -8,7 +8,7 @@ from fake_useragent import UserAgent
 
 
 
-def download_data(url: str) -> list[list]:
+def __download_data(url: str) -> list[list]:
     # 建立隨機user_agent
     user_agent = UserAgent()
 
@@ -67,7 +67,7 @@ def download_data(url: str) -> list[list]:
     return anime_data
 
 
-def create_table(conn) -> None:
+def __create_table(conn) -> None:
     cursor = conn.cursor()
     cursor.execute(
         '''
@@ -98,7 +98,7 @@ def create_table(conn) -> None:
     conn.commit()
 
 
-def insert_data(conn, infos: list[str], tags: list[str]) -> None:
+def __insert_data(conn, infos: list[str], tags: list[str]) -> None:
     # 避免作品標籤超過6個
     if len(tags) >= 7:
         tags = [tags[i] for i in range(6)]
@@ -145,13 +145,12 @@ def fetch_data(sql: str) -> list[tuple]:
     return rows
 
 
-def last_page() -> int:
+def last_page(url:str) -> int:
     user_agent = UserAgent()
     headers = {
     'user-agent': user_agent.random,
     }
-    response = requests.get(
-        'https://ani.gamer.com.tw/animeList.php?', headers=headers)
+    response = requests.get(url, headers=headers)
     response.encoding = 'utf8'
     if response.status_code == 200:
         print(f'取得頁碼_訊息代號：{response.status_code}')
@@ -172,18 +171,18 @@ def main():
                             host=pw.HOST,
                             port=pw.PORT)
     # 創建資料表
-    create_table(conn)
+    __create_table(conn)
 
     # 取得動畫列表最後一頁的頁碼
-    page_number = last_page()
+    page_number = last_page('https://ani.gamer.com.tw/animeList.php?')
     
     # 開始逐頁下載資料
     n = 0
     for i in range(page_number):
         url = f'https://ani.gamer.com.tw/animeList.php?page={i+1}'
-        anime_data = download_data(url)
+        anime_data = __download_data(url)
         for infos_tags in anime_data:
-            insert_data(conn, infos=infos_tags[0], tags=infos_tags[1])
+            __insert_data(conn, infos=infos_tags[0], tags=infos_tags[1])
         n += 1
         print(f'第{n}頁下載完畢')
         
