@@ -7,17 +7,18 @@ import time
 from fake_useragent import UserAgent
 
 
-
 def __download_data(url: str) -> list[list]:
     # 建立隨機user_agent
     user_agent = UserAgent()
 
     # 建立隨機referer
-    referer_choices = ['https://jplop.neocities.org/shar_free_movie_site', 'www.google.com','https://favsk.com/ani-gamer/','www.bing.com']
+    referer_choices = ['https://jplop.neocities.org/shar_free_movie_site',
+                       'www.google.com', 'https://favsk.com/ani-gamer/', 'www.bing.com']
     referer = random.choice(referer_choices)
-    
+
     # 開始爬蟲
-    response = requests.get(url, headers={"User-Agent": user_agent.random, "Referer": referer,})
+    response = requests.get(
+        url, headers={"User-Agent": user_agent.random, "Referer": referer, })
     response.encoding = 'utf8'
     if response.status_code == 200:
         print(f'請求成功：{response.status_code}')
@@ -37,13 +38,14 @@ def __download_data(url: str) -> list[list]:
         anime_episode = anime_info.select_one(
             '.theme-number').text.strip().replace('共', '').replace('集', '')
         anime_link = 'https://ani.gamer.com.tw/' + anime_info['href']
-        
+
         # 建立隨機延遲
-        delay_choices = [0.2,0.5,0.7,1,1.3,1.8,2] # 延遲的秒數
-        delay = random.choice(delay_choices)  #隨機選取秒數
+        delay_choices = [0.2, 0.5, 0.7, 1, 1.3, 1.8, 2]  # 延遲的秒數
+        delay = random.choice(delay_choices)  # 隨機選取秒數
         time.sleep(delay)
 
-        r1 = requests.get(anime_link, headers={"User-Agent": user_agent.random, "Referer": referer,})
+        r1 = requests.get(anime_link, headers={
+                          "User-Agent": user_agent.random, "Referer": referer, })
         r1.encoding = 'utf8'
         detail_data = BeautifulSoup(r1.text, 'html.parser')
         acg_score = detail_data.select_one('.acg-score')
@@ -71,7 +73,7 @@ def __create_table(conn) -> None:
     cursor = conn.cursor()
     cursor.execute(
         '''
-    CREATE TABLE  IF NOT EXISTS 巴哈姆特動畫瘋(
+    CREATE TABLE IF NOT EXISTS 巴哈姆特動畫瘋(
 	id SERIAL,
 	動畫名 TEXT NOT NULL,
 	觀看數 TEXT NOT NULL,
@@ -89,6 +91,8 @@ def __create_table(conn) -> None:
 	作品分類4 TEXT DEFAULT NULL,
 	作品分類5 TEXT DEFAULT NULL,
 	作品分類6 TEXT DEFAULT NULL,
+    原作載體 TEXT DEFAULT NULL,
+    新續作 TEXT DEFAULT NULL,
 	PRIMARY KEY(id),
 	UNIQUE(動畫名)
     )
@@ -120,7 +124,7 @@ def __insert_data(conn, infos: list[str], tags: list[str]) -> None:
         ON CONFLICT (動畫名) DO UPDATE SET
     '''
     # 基礎insert_sql + 更新內容
-    
+
     update_columns = [f"{column_names[i]}='{infos[i]}'" for i in range(1, 7)]
     on_conflict_sql = ', '.join(update_columns)
     insert_sql += on_conflict_sql
@@ -145,10 +149,10 @@ def fetch_data(sql: str) -> list[tuple]:
     return rows
 
 
-def last_page(url:str) -> int:
+def last_page(url: str) -> int:
     user_agent = UserAgent()
     headers = {
-    'user-agent': user_agent.random,
+        'user-agent': user_agent.random,
     }
     response = requests.get(url, headers=headers)
     response.encoding = 'utf8'
@@ -175,7 +179,7 @@ def main():
 
     # 取得動畫列表最後一頁的頁碼
     page_number = last_page('https://ani.gamer.com.tw/animeList.php?')
-    
+
     # 開始逐頁下載資料
     n = 0
     for i in range(page_number):
@@ -185,7 +189,7 @@ def main():
             __insert_data(conn, infos=infos_tags[0], tags=infos_tags[1])
         n += 1
         print(f'第{n}頁下載完畢')
-        
+
         # 當爬取10頁內容後暫停10分鐘
         if n % 10 == 0:
             time.sleep(10*60)
