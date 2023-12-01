@@ -9,3 +9,4 @@ selenium
 flask
 dash
 psycopg2-binary
+fake_useragent
