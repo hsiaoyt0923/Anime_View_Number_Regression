@@ -3,12 +3,13 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import psycopg2
 import password as pw
+import time
 
 
 
 def download_data(url: str) -> list[list]:
     headers = {
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'}
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36'
     r = requests.get(url, headers=headers)
     r.encoding = 'utf8'
     if r.status_code == 200:
@@ -27,6 +28,7 @@ def download_data(url: str) -> list[list]:
         anime_episode = anime_info.select_one(
             '.theme-number').text.strip().replace('共', '').replace('集', '')
         anime_link = 'https://ani.gamer.com.tw/' + anime_info['href']
+        time.sleep(0.2)
         r1 = requests.get(anime_link, headers=headers)
         r1.encoding = 'utf8'
         detail_data = BeautifulSoup(r1.text, 'html.parser')
@@ -130,7 +132,7 @@ def fetch_data(sql: str) -> list[tuple]:
 
 def last_page() -> int:
     headers = {
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'}
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36'
     response = requests.get(
         'https://ani.gamer.com.tw/animeList.php?', headers=headers)
     response.encoding = 'utf8'
