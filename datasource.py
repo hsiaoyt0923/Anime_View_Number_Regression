@@ -9,14 +9,14 @@ import time
 
 def download_data(url: str) -> list[list]:
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36'
-    r = requests.get(url, headers=headers)
-    r.encoding = 'utf8'
-    if r.status_code == 200:
-        print(f'請求成功：{r.status_code}')
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36'}
+    response = requests.get(url, headers=headers)
+    response.encoding = 'utf8'
+    if response.status_code == 200:
+        print(f'請求成功：{response.status_code}')
     else:
-        print(f'請求失敗：{r.status_code}')
-    intro_data = BeautifulSoup(r.text, 'html.parser')
+        print(f'請求失敗：{response.status_code}')
+    intro_data = BeautifulSoup(response.text, 'html.parser')
     anime_infos = intro_data.select('.theme-list-main')
     anime_data = []
     for anime_info in anime_infos:
