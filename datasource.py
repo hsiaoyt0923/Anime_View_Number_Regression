@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import pandas as pd
 import psycopg2
 import password as pw
 import random
@@ -10,9 +9,14 @@ from fake_useragent import UserAgent
 
 
 def download_data(url: str) -> list[list]:
+    # 建立隨機user_agent
     user_agent = UserAgent()
+
+    # 建立隨機referer
     referer_choices = ['https://jplop.neocities.org/shar_free_movie_site', 'www.google.com','https://favsk.com/ani-gamer/','www.bing.com']
     referer = random.choice(referer_choices)
+    
+    # 開始爬蟲
     response = requests.get(url, headers={"User-Agent": user_agent.random, "Referer": referer,})
     response.encoding = 'utf8'
     if response.status_code == 200:
@@ -24,8 +28,8 @@ def download_data(url: str) -> list[list]:
     anime_data = []
     for anime_info in anime_infos:
         anime_name = anime_info.select_one('.theme-name').text.strip()
-        if anime_info.select_one('.anime-label-block').text != '':
-                anime_name = anime_name + ' 年齡限制版'
+        if anime_info.select_one('.color-R18') is not None:
+            anime_name = anime_name + ' 年齡限制版'
         show_view_number = anime_info.select_one(
             '.show-view-number > p').text.strip()
         anime_time = anime_info.select_one(
@@ -35,9 +39,10 @@ def download_data(url: str) -> list[list]:
         anime_link = 'https://ani.gamer.com.tw/' + anime_info['href']
         
         # 建立隨機延遲
-        delay_choices = [0.1,0.2,0.3,0.4,0.5] # 延遲的秒數
+        delay_choices = [0.2,0.5,0.7,1,1.3,1.8,2] # 延遲的秒數
         delay = random.choice(delay_choices)  #隨機選取秒數
         time.sleep(delay)
+
         r1 = requests.get(anime_link, headers={"User-Agent": user_agent.random, "Referer": referer,})
         r1.encoding = 'utf8'
         detail_data = BeautifulSoup(r1.text, 'html.parser')
@@ -171,10 +176,6 @@ def main():
 
     # 取得動畫列表最後一頁的頁碼
     page_number = last_page()
-
-    # 建立隨機延遲，避免被網頁阻擋爬蟲
-    delay_choices = [0.2,0.5,0.7,1,1.5,1.8,2,2.1,4] # 延遲的秒數
-    delay = random.choice(delay_choices)  #隨機選取秒數
     
     # 開始逐頁下載資料
     n = 0
@@ -185,7 +186,10 @@ def main():
             insert_data(conn, infos=infos_tags[0], tags=infos_tags[1])
         n += 1
         print(f'第{n}頁下載完畢')
-        time.sleep(delay)
+        
+        # 當爬取10頁內容後暫停10分鐘
+        if n % 10 == 0:
+            time.sleep(10*60)
 
     # 關閉資料庫
     conn.close()
