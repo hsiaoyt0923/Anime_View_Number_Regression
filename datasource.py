@@ -76,23 +76,23 @@ def __create_table(conn) -> None:
     CREATE TABLE IF NOT EXISTS 巴哈姆特動畫瘋(
 	id SERIAL,
 	動畫名 TEXT NOT NULL,
-	觀看數 TEXT NOT NULL,
-	季度 TEXT NOT NULL,
-	集數 TEXT NOT NULL,
-	動畫連結 TEXT NOT NULL,
+	觀看數 TEXT,
+	季度 TEXT,
+	集數 TEXT,
+	動畫連結 TEXT,
 	星級 TEXT,
 	評分人數 TEXT,
-	導演監督 TEXT NOT NULL,
-	台灣代理 TEXT NOT NULL,
-	製作廠商 TEXT NOT NULL,
-	作品分類1 TEXT DEFAULT NULL,
-	作品分類2 TEXT DEFAULT NULL,
-	作品分類3 TEXT DEFAULT NULL,
-	作品分類4 TEXT DEFAULT NULL,
-	作品分類5 TEXT DEFAULT NULL,
-	作品分類6 TEXT DEFAULT NULL,
-    原作載體 TEXT DEFAULT NULL,
-    新續作 TEXT DEFAULT NULL,
+	導演監督 TEXT,
+	台灣代理 TEXT,
+	製作廠商 TEXT,
+	作品分類1 TEXT,
+	作品分類2 TEXT,
+	作品分類3 TEXT,
+	作品分類4 TEXT,
+	作品分類5 TEXT,
+	作品分類6 TEXT,
+    原作載體 TEXT,
+    新續作 TEXT,
 	PRIMARY KEY(id),
 	UNIQUE(動畫名)
     )
@@ -133,20 +133,6 @@ def __insert_data(conn, infos: list[str], tags: list[str]) -> None:
     cursor.execute(insert_sql, infos + tags)
     cursor.close()
     conn.commit()
-
-
-def fetch_data(sql: str) -> list[tuple]:
-    conn = psycopg2.connect(database=pw.DATABASE,
-                            user=pw.USER,
-                            password=pw.PASSWORD,
-                            host=pw.HOST,
-                            port=pw.PORT)
-
-    cursor = conn.cursor()
-    cursor.execute(sql)
-    rows = cursor.fetchall()
-    conn.close()
-    return rows
 
 
 def __last_page(url: str) -> int:
