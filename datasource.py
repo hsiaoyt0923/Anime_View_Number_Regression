@@ -1,10 +1,10 @@
-import requests
-from bs4 import BeautifulSoup
-import psycopg2
-import password as pw
 import random
 import time
+import requests
+from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
+import psycopg2
+import password as pw
 
 
 def __download_data(url: str) -> list[list]:

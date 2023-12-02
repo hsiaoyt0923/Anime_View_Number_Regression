@@ -2,7 +2,7 @@ import psycopg2
 import password as pw
 
 
-def fetch_data(conn) -> list[tuple]:
+def __fetch_data(conn) -> list[tuple]:
     select_query = '''
         SELECT * FROM 巴哈姆特動畫瘋
         WHERE 季度 LIKE '2020%' OR
@@ -18,7 +18,7 @@ def fetch_data(conn) -> list[tuple]:
     return rows
 
 
-def create_revised_table(conn) -> None:
+def __create_revised_table(conn) -> None:
     cursor = conn.cursor()
     cursor.execute(
         '''
@@ -53,7 +53,7 @@ def create_revised_table(conn) -> None:
     print('資料表創建成功')
 
 
-def convert_datatype(data: tuple) -> list:
+def __convert_datatype(data: tuple) -> list:
     values = []
 
     # 加入動畫名
@@ -109,7 +109,7 @@ def convert_datatype(data: tuple) -> list:
     return values
 
 
-def insert_data(conn, data: list) -> None:
+def __insert_data(conn, data: list) -> None:
     insert_query = f'''
         INSERT INTO 動畫瘋訓練資料集(
                 動畫名,
@@ -139,7 +139,7 @@ def insert_data(conn, data: list) -> None:
     cursor.close()
 
 
-def main():
+def __extract_data():
     # 與資料庫建立連接
     conn = psycopg2.connect(database=pw.DATABASE,
                             user=pw.USER,
@@ -147,20 +147,20 @@ def main():
                             host=pw.HOST,
                             port=pw.PORT)
     # 創建資料表
-    create_revised_table(conn)
+    __create_revised_table(conn)
 
     # 抓取訓練集所需資料
-    rows = fetch_data(conn)
+    rows = __fetch_data(conn)
 
     # 進行資料型別轉換後插入資料
     for row in rows:
-        values = convert_datatype(row)
+        values = __convert_datatype(row)
         print(values)
-        insert_data(conn, data=values)
+        __insert_data(conn, data=values)
 
     conn.commit()
     conn.close()
 
 
 if __name__ == '__main__':
-    main()
+    __extract_data()
