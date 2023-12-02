@@ -18,7 +18,7 @@ def fetch_data(conn) -> list[tuple]:
     return rows
 
 
-def create_dataset_table(conn) -> None:
+def create_revised_table(conn) -> None:
     cursor = conn.cursor()
     cursor.execute(
         '''
@@ -50,7 +50,7 @@ def create_dataset_table(conn) -> None:
     )
     cursor.close()
     conn.commit()
-    print('創建資料表成功')
+    print('資料表創建成功')
 
 
 def convert_datatype(data: tuple) -> list:
@@ -112,27 +112,27 @@ def convert_datatype(data: tuple) -> list:
 def insert_data(conn, data: list) -> None:
     insert_query = f'''
         INSERT INTO 動畫瘋訓練資料集(
-        動畫名,
-        總觀看數,
-        年份,
-        月份,
-        集數,
-        星級,
-        評分人數,
-        導演監督,
-        台灣代理,
-        製作廠商,
-        作品分類1,
-        作品分類2,
-        作品分類3,
-        作品分類4,
-        作品分類5,
-        作品分類6,
-        原作載體,
-        新續作,
-        平均觀看數
-        )
-        VALUES({','.join(['%s'] * 19)})
+                動畫名,
+                總觀看數,
+                年份,
+                月份,
+                集數,
+                星級,
+                評分人數,
+                導演監督,
+                台灣代理,
+                製作廠商,
+                作品分類1,
+                作品分類2,
+                作品分類3,
+                作品分類4,
+                作品分類5,
+                作品分類6,
+                原作載體,
+                新續作,
+                平均觀看數
+                )
+                VALUES({','.join(['%s'] * 19)})
         '''
     cursor = conn.cursor()
     cursor.execute(insert_query, data)
@@ -147,7 +147,7 @@ def main():
                             host=pw.HOST,
                             port=pw.PORT)
     # 創建資料表
-    create_dataset_table(conn)
+    create_revised_table(conn)
 
     # 抓取訓練集所需資料
     rows = fetch_data(conn)
