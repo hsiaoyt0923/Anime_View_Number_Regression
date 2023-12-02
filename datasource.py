@@ -149,7 +149,7 @@ def fetch_data(sql: str) -> list[tuple]:
     return rows
 
 
-def last_page(url: str) -> int:
+def __last_page(url: str) -> int:
     user_agent = UserAgent()
     headers = {
         'user-agent': user_agent.random,
@@ -178,7 +178,7 @@ def main():
     __create_table(conn)
 
     # 取得動畫列表最後一頁的頁碼
-    page_number = last_page('https://ani.gamer.com.tw/animeList.php?')
+    page_number = __last_page('https://ani.gamer.com.tw/animeList.php?')
 
     # 開始逐頁下載資料
     n = 0
