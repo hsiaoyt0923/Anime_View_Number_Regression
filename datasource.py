@@ -122,6 +122,7 @@ def __create_table(conn) -> None:
     )
     cursor.close()
     conn.commit()
+    print('資料表創建成功')
 
 
 def __insert_data(conn, infos: list[str], tags: list[str]) -> None:
@@ -129,7 +130,7 @@ def __insert_data(conn, infos: list[str], tags: list[str]) -> None:
     if len(tags) >= 7:
         tags = [tags[i] for i in range(6)]
 
-    # column_names的必備元素
+    # column_names必備元素
     column_names = [
         "動畫名", "觀看數", "季度", "集數", "動畫連結",
         "星級", "評分人數", "導演監督", "台灣代理", "製作廠商"
@@ -146,15 +147,13 @@ def __insert_data(conn, infos: list[str], tags: list[str]) -> None:
         ON CONFLICT (動畫名) DO UPDATE SET
     '''
     # 基礎insert_sql + 更新內容
-
-    update_columns = [f"{column_names[i]}='{infos[i]}'" for i in range(1, 7)]
-    on_conflict_sql = ', '.join(update_columns)
+    update_content = [f"{column_names[i]}='{infos[i]}'" for i in range(1, 7)]
+    on_conflict_sql = ', '.join(update_content)
     insert_sql += on_conflict_sql
 
     cursor = conn.cursor()
     cursor.execute(insert_sql, infos + tags)
     cursor.close()
-    conn.commit()
 
 
 def __last_page(url: str) -> int:
@@ -191,10 +190,16 @@ def main():
     # 開始逐頁下載資料
     n = 0
     for i in range(page_number):
+        # 每頁的url
         url = f'https://ani.gamer.com.tw/animeList.php?page={i+1}'
         anime_data = __download_data(url)
+
+        # infos_tags是由infos和tags二個list所組成的list
         for infos_tags in anime_data:
             __insert_data(conn, infos=infos_tags[0], tags=infos_tags[1])
+
+        conn.commit()
+
         n += 1
         print(f'第{n}頁下載完畢')
 
