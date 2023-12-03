@@ -77,16 +77,17 @@ def insert_tags(conn, tags: list[list]):
 
     # 設定更新條件
     sql = f'''
-        update 動畫瘋訓練資料集test
+        update 動畫瘋訓練資料集
         set 原作載體='{tag_list[0]}', 新續作='{tag_list[1]}'
         where 動畫名 in ({namestr})
         or 動畫名 like '%{firstname}%'
         or 動畫名 like '%{secondname}%'
         '''
 
-    # 若動畫名中有空格
+    # 若最常見動畫名中有空格
     if len(f_list) > 1:
         thirdname = f_list[1]
+        # 若空格後「有」'季'、'2'、'第二'、'eason'等字樣
         if thirdname.find('季') != -1 or thirdname.find('2') != -1 or thirdname.find('第二') != -1 or thirdname.find('eason') != -1:
             tag_list[1] = '續作'
         else:
