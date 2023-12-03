@@ -52,10 +52,12 @@ def insert_tags(conn, tags: list[list]):
 
     # 從最常用的動畫名翻譯中切出不同字串作模糊搜尋
     f_list = name_list[0].split()
-    firstname = f_list[0][:4]
-    secondname = f_list[0][1:5]
-    thirdname = f_list[0][2:6]
+    firstname = f_list[0]
+    secondname = f_list[0][:4]
+    thirdname = f_list[0][1:5]
+    forthname = firstname.replace('~', '').replace('-', '').replace('‘', '')
 
+    # 為了放入SQL語法中作處理
     namestr = ''
     for item in name_list:
         namestr += f"'{item}'"
@@ -65,7 +67,6 @@ def insert_tags(conn, tags: list[list]):
     print(namestr)
     print(firstname)
     print(secondname)
-    print(thirdname)
 
     sql = f'''
         update 動畫瘋訓練資料集
