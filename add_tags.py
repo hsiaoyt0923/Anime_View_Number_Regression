@@ -79,6 +79,8 @@ def insert_tags(conn, tags: list[list]):
     print(namestr)
     print(firstname)
     print(secondname)
+    print(thirdname)
+    print(forthname)
 
     sql = f'''
         update 動畫瘋訓練資料集
@@ -87,6 +89,7 @@ def insert_tags(conn, tags: list[list]):
         or 動畫名 like '%{firstname}%'
         or 動畫名 like '%{secondname}%'
         or 動畫名 like '%{thirdname}%'
+        or 動畫名 like '%{forthname}%'
         '''
     cursor = conn.cursor()
     cursor.execute(sql)
