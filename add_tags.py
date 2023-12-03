@@ -73,7 +73,7 @@ def insert_tags(conn, tags: list[list]):
     if len(f_list) > 1:
         thirdname = f_list[1]
         forthname = f_list[1][:4]
-        if thirdname.find('季') != -1 or thirdname.find('2') != -1:
+        if thirdname.find('季') != -1 or thirdname.find('2') != -1 or thirdname.find('第二') != -1:
             tag_list[1] = '續作'
 
     # 為了放入SQL語法中作處理
