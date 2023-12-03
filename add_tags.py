@@ -96,7 +96,7 @@ def insert_tags(conn, tags: list[list]):
         or 動畫名 like '%{firstname}%'
         or 動畫名 like '%{secondname}%'
         '''
-    if thirdname is not None:
+    if thirdname is not None and (thirdname.find('季') == -1 or thirdname.find('2') == -1 or thirdname.find('第二') == -1):
         sql += " or 動畫名 like '%{thirdname}%' or 動畫名 like '%{forthname}%'"
 
     cursor = conn.cursor()
