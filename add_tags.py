@@ -18,10 +18,12 @@ def download_tags(url: str) -> list[list]:
     else:
         print(f'請求失敗：{response.status_code}')
 
+    # 建立BeautifulSoup物件
     soup = BeautifulSoup(response.text, 'html.parser')
     anime_contents = soup.select('.anime_content')
     anime_tags = []
 
+    # 使用迴圈從目標區塊取得資訊
     for anime_content in anime_contents:
         per_anime = []
         anime_name = anime_content.select_one('.entity_localized_name').text
@@ -30,14 +32,24 @@ def download_tags(url: str) -> list[list]:
             other_names = ''
         else:
             other_names = other_names.text.replace('其他名稱：', '')
+
+        # 將動畫名存入name_list作為新增標籤依據
         name_list = [anime_name] + other_names.split('、')
         tags = anime_content.select('.anime_tag > tags')
+
+        # 將標籤存入tag_list
         tag_list = []
         for tag in tags:
             tag_list.append(tag.text)
+
+        # 避免tag_list內包含不是原作載體及新續作的標籤
         tag_list = [tag_list[i] for i in range(2)]
+
+        # per_anime內是單部動畫的資訊
         per_anime.append(name_list)
         per_anime.append(tag_list)
+
+        # anime_tags內是一個季度動畫的資訊
         anime_tags.append(per_anime)
     return anime_tags
 
