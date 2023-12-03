@@ -92,22 +92,6 @@ def main():
     conn.close()
 
 
-def fetch_data(conn) -> list[tuple]:
-    select_query = '''
-         * FROM 巴哈姆特動畫瘋
-        WHERE 季度 LIKE '2020%' OR
-        季度 LIKE '2021%' OR
-        季度 LIKE '2022%' OR
-        季度 in ('2023/01','2023/04')
-        order by id
-        '''
-    cursor = conn.cursor()
-    cursor.execute(select_query)
-    rows = cursor.fetchall()
-    cursor.close()
-    return rows
-
-
 if __name__ == '__main__':
     main()
 
