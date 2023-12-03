@@ -66,6 +66,7 @@ def insert_tags(conn, tags: list[list]):
     f_list = name_list[0].split()
     firstname = f_list[0]
     secondname = f_list[0][:4]
+    thirdname = None
 
     # 若動畫名中有空格
     if len(f_list) > 1:
@@ -93,9 +94,10 @@ def insert_tags(conn, tags: list[list]):
         where 動畫名 in ({namestr})
         or 動畫名 like '%{firstname}%'
         or 動畫名 like '%{secondname}%'
-        or 動畫名 like '%{thirdname}%'
-        or 動畫名 like '%{forthname}%'
         '''
+    if thirdname is not None:
+        sql += " or 動畫名 like '%{thirdname}%' or 動畫名 like '%{forthname}%'"
+
     cursor = conn.cursor()
     cursor.execute(sql)
     cursor.close()
