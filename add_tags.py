@@ -65,12 +65,14 @@ def insert_tags(conn, tags: list[list]):
     # 從最常用的動畫名翻譯中切出不同字串作模糊搜尋
     f_list = name_list[0].split()
     firstname = f_list[0]
-    secondname = f_list[1]
-    thirdname = f_list[0][:4]
-    forthname = f_list[1][:4]
+    secondname = f_list[0][:4]
 
-    if secondname.find('季') != -1:
-        tag_list[1] = '續作'
+    # 若動畫名中有空格
+    if len(f_list) > 1:
+        thirdname = f_list[1]
+        forthname = f_list[1][:4]
+        if thirdname.find('季') != -1 or thirdname.find('2') != -1:
+            tag_list[1] = '續作'
 
     # 為了放入SQL語法中作處理
     namestr = ''
