@@ -65,9 +65,12 @@ def insert_tags(conn, tags: list[list]):
     # 從最常用的動畫名翻譯中切出不同字串作模糊搜尋
     f_list = name_list[0].split()
     firstname = f_list[0]
-    secondname = f_list[0][:4]
-    thirdname = f_list[0][1:5]
-    forthname = firstname.replace('~', '').replace('-', '').replace('‘', '')
+    secondname = f_list[1]
+    thirdname = f_list[0][:4]
+    forthname = f_list[1][:4]
+
+    if secondname.find('季') != -1:
+        tag_list[1] = '續作'
 
     # 為了放入SQL語法中作處理
     namestr = ''
@@ -83,7 +86,7 @@ def insert_tags(conn, tags: list[list]):
     print(forthname)
 
     sql = f'''
-        update 動畫瘋訓練資料集
+        update 動畫瘋訓練資料集test
         set 原作載體='{tag_list[0]}', 新續作='{tag_list[1]}'
         where 動畫名 in ({namestr})
         or 動畫名 like '%{firstname}%'
