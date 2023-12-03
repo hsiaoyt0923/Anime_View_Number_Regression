@@ -67,6 +67,7 @@ def insert_tags(conn, tags: list[list]):
     firstname = f_list[0]
     secondname = f_list[0][:4]
     thirdname = None
+    forthname = None
 
     # 若動畫名中有空格
     if len(f_list) > 1:
