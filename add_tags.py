@@ -2,8 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import psycopg2
 import password as pw
-import random
-import time
 from fake_useragent import UserAgent
 
 
