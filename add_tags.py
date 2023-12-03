@@ -67,14 +67,6 @@ def insert_tags(conn, tags: list[list]):
     firstname = f_list[0]
     secondname = f_list[0][:4]
     thirdname = None
-    forthname = None
-
-    # 若動畫名中有空格
-    if len(f_list) > 1:
-        thirdname = f_list[1]
-        forthname = f_list[1][:4]
-        if thirdname.find('季') != -1 or thirdname.find('2') != -1 or thirdname.find('第二') != -1:
-            tag_list[1] = '續作'
 
     # 為了放入SQL語法中作處理
     namestr = ''
@@ -83,12 +75,7 @@ def insert_tags(conn, tags: list[list]):
         namestr += ','
     namestr = namestr.rstrip(',')
 
-    print(namestr)
-    print(firstname)
-    print(secondname)
-    print(thirdname)
-    print(forthname)
-
+    # 設定更新條件
     sql = f'''
         update 動畫瘋訓練資料集
         set 原作載體='{tag_list[0]}', 新續作='{tag_list[1]}'
@@ -96,8 +83,20 @@ def insert_tags(conn, tags: list[list]):
         or 動畫名 like '%{firstname}%'
         or 動畫名 like '%{secondname}%'
         '''
-    if thirdname is not None and (thirdname.find('季') == -1 or thirdname.find('2') == -1 or thirdname.find('第二') == -1):
-        sql += " or 動畫名 like '%{thirdname}%' or 動畫名 like '%{forthname}%'"
+
+    # 若動畫名中有空格
+    if len(f_list) > 1:
+        thirdname = f_list[1]
+        if thirdname.find('季') != -1 or thirdname.find('2') != -1 or thirdname.find('第二') != -1 or thirdname.find('eason') != -1:
+            tag_list[1] = '續作'
+        else:
+            # 增加更新條件
+            sql += " or 動畫名 like '%{thirdname}%'"
+
+    print(namestr)
+    print(firstname)
+    print(secondname)
+    print(thirdname)
 
     cursor = conn.cursor()
     cursor.execute(sql)
