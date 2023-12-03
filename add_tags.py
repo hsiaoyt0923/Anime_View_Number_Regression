@@ -77,7 +77,7 @@ def insert_tags(conn, tags: list[list]):
 
     # 設定更新條件
     sql = f'''
-        update 動畫瘋訓練資料集
+        update 動畫瘋訓練資料集test
         set 原作載體='{tag_list[0]}', 新續作='{tag_list[1]}'
         where 動畫名 in ({namestr})
         or 動畫名 like '%{firstname}%'
