@@ -14,7 +14,9 @@ select * from 動畫瘋訓練資料集 where 年份='2022'
 
 select id, 動畫名, 年份, 月份, 原作載體, 新續作 from 動畫瘋訓練資料集 order by id
 
-select id, 動畫名, 總觀看數, 平均觀看數, 集數, 年份, 月份, 原作載體, 新續作 from 動畫瘋訓練資料集 where 年份='2023'
+select * from 動畫瘋訓練資料集 where 作品分類6 is not null
+
+select id, 動畫名, 年份, 月份, 原作載體, 新續作 from 動畫瘋訓練資料集 where 動畫名 like '%LORD%'
 
 select id, 動畫名, 年份, 月份, 原作載體, 新續作 from 動畫瘋訓練資料集 where 原作載體 is null or 新續作 is null order by 動畫名
 
@@ -38,6 +40,7 @@ update 動畫瘋訓練資料集 set 月份='秋番' where 月份 in ('10','11','
 
 
 --針對程式無法自動填入的標籤進行手動更正
+
 update 動畫瘋訓練資料集 set 原作載體='漫畫改編', 新續作='續作' where 動畫名 like '%鬼滅%'
 update 動畫瘋訓練資料集 set 新續作='新作' where 動畫名='鬼滅之奏'
 update 動畫瘋訓練資料集 set 新續作='新作' where 動畫名='國高中一貫！！鬼滅學園物語'
@@ -78,6 +81,7 @@ update 動畫瘋訓練資料集 set 原作載體='小說改編', 新續作='新�
 update 動畫瘋訓練資料集 set 原作載體='小說改編', 新續作='續作' where 動畫名='艾梅洛閣下 II 世事件簿 -魔眼蒐集列車 Grace note- 特別篇'
 update 動畫瘋訓練資料集 set 原作載體='小說改編', 新續作='新作' where 動畫名='海岬的迷途之家'
 update 動畫瘋訓練資料集 set 原作載體='小說改編', 新續作='新作' where 動畫名='鹿王'
+update 動畫瘋訓練資料集 set 原作載體='小說改編', 新續作='續作' where 動畫名 like '%OVERLORD%'
 update 動畫瘋訓練資料集 set 原作載體='小說改編' where 動畫名 like '%打工吧，魔王大人！%'
 update 動畫瘋訓練資料集 set 原作載體='遊戲改編', 新續作='新作' where 動畫名='ICHU 偶像進行曲'
 update 動畫瘋訓練資料集 set 原作載體='遊戲改編', 新續作='新作' where 動畫名 like '%MUV-LUV ALTERNATIVE%'
