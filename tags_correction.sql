@@ -12,6 +12,8 @@ select * from 動畫瘋訓練資料集 order by id
 
 select id, 動畫名, 年份, 月份, 原作載體, 新續作 from 動畫瘋訓練資料集 order by id
 
+select id, 動畫名, 總觀看數, 平均觀看數, 集數, 年份, 月份, 原作載體, 新續作 from 動畫瘋訓練資料集 where 月份='夏番' order by 年份
+
 select id, 動畫名, 年份, 月份, 原作載體, 新續作 from 動畫瘋訓練資料集 where 原作載體 is null or 新續作 is null order by 動畫名
 
 select id, 動畫名, 年份, 月份, 原作載體, 新續作 from 動畫瘋訓練資料集 where 動畫名 like '%賢者時間%'
