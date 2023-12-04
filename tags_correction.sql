@@ -1,3 +1,5 @@
+drop table 動畫瘋訓練資料集
+
 alter table 動畫瘋訓練資料集
 drop column 原作載體,
 drop column 新續作
