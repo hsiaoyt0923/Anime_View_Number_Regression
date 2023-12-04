@@ -189,7 +189,7 @@ def animad_scraper():
 
     # 開始逐頁下載資料
     n = 0
-    for i in range(page_number):
+    for i in range(20):
         # 每頁的url
         url = f'https://ani.gamer.com.tw/animeList.php?page={i+1}'
         anime_data = __download_data(url)
