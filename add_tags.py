@@ -65,8 +65,7 @@ def insert_tags(conn, tags: list[list]):
     # 從最常用的動畫名翻譯中切出不同字串作模糊搜尋
     f_list = name_list[0].split()
     firstname = f_list[0]
-    secondname = f_list[0][:4]
-    thirdname = None
+    secondname = None
 
     # 為了放入SQL語法中作處理
     namestr = ''
@@ -81,23 +80,21 @@ def insert_tags(conn, tags: list[list]):
         set 原作載體='{tag_list[0]}', 新續作='{tag_list[1]}'
         where 動畫名 in ({namestr})
         or 動畫名 like '%{firstname}%'
-        or 動畫名 like '%{secondname}%'
         '''
 
     # 若最常見動畫名中有空格
     if len(f_list) > 1:
-        thirdname = f_list[1]
+        secondname = f_list[1]
         # 若空格後「有」'季'、'2'、'第二'、'eason'等字樣
-        if thirdname.find('季') != -1 or thirdname.find('2') != -1 or thirdname.find('第二') != -1 or thirdname.find('eason') != -1:
+        if secondname.find('季') != -1 or secondname.find('2') != -1 or secondname.find('第二') != -1 or secondname.find('eason') != -1:
             tag_list[1] = '續作'
         else:
             # 增加更新條件
-            sql += " or 動畫名 like '%{thirdname}%'"
+            sql += " or 動畫名 like '%{secondname}%'"
 
     print(namestr)
     print(firstname)
     print(secondname)
-    print(thirdname)
 
     cursor = conn.cursor()
     cursor.execute(sql)
