@@ -1,7 +1,12 @@
+--複製資料表
+create table 動畫瘋訓練資料集after as table 動畫瘋訓練資料集
+
 --搜尋指令
 select * from 動畫瘋訓練資料集 order by id
 
 select * from 動畫瘋訓練資料集 where 年份='2022'
+
+select * from 動畫瘋訓練資料集 where 動畫名 like '%年齡限制版%'
 
 select id, 動畫名, 年份, 月份, 原作載體, 新續作 from 動畫瘋訓練資料集 order by id
 
