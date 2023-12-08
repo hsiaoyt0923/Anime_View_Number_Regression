@@ -54,6 +54,8 @@ select id, 動畫名, 年份, 月份, 原作載體, 新續作 from 動畫瘋訓�
 
 select id, 動畫名, 年份, 月份, 原作載體, 新續作 from 動畫瘋訓練資料集 where 動畫名 like '%天地無用%'
 
+select * from 動畫瘋訓練資料集 where 作品分類4='特攝'
+
 
 --將月份轉為春、夏、秋、冬
 select id, 動畫名, 年份, 月份, 原作載體, 新續作 from 動畫瘋訓練資料集 where 月份 not in ('冬番','春番','夏番','秋番')
@@ -98,6 +100,7 @@ or 動畫名 like '%衝鋒戰士%'
 or 動畫名 like '%舞台劇%'
 or 動畫名 like '%劇場版%'
 or 動畫名 like '%電影版%'
+or 動畫名 like '%真人版%'
 or 集數=1
 
 

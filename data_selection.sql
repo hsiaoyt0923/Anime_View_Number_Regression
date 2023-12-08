@@ -38,3 +38,5 @@ select * from 動畫瘋訓練資料集after where 動畫名 like '烙印勇士 �
 alter table 動畫瘋訓練資料集after drop column id
 alter table 動畫瘋訓練資料集after drop column 台灣代理
 
+alter table 動畫瘋訓練資料集after add constraint PK_動畫瘋訓練資料集after primary key(動畫名)
+
