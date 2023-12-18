@@ -5,7 +5,6 @@ matplotlib
 seaborn
 requests
 beautifulsoup4
-selenium
 flask
 dash
 psycopg2-binary
