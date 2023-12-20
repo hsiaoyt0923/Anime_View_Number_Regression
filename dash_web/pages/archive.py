@@ -4,7 +4,7 @@ import pandas as pd
 import dash_bootstrap_components as dbc
 import base64
 
-dash.register_page(__name__)
+dash.register_page(__name__, title='動畫觀看數統計')
 
 image_filename = './assets/suraimu.png'
 
@@ -17,15 +17,6 @@ def b64_image(image_filename):
 df = pd.read_csv('web_csv/BaHaMut_9.csv')
 layout = html.Div(
     [
-
-        html.Div([
-            html.Div([
-                html.H1("BaHaMutAnime")
-            ], className="title")
-        ],
-            className="title-row",
-            style={"paddingTop": '2rem'}),
-
         html.Div([
             html.Div([
                 dash_table.DataTable(
@@ -38,7 +29,7 @@ layout = html.Div(
                     style_cell={'whiteSpace': 'normal',
                                 'textAlign': 'center'},
                     style_cell_conditional=[
-                        {'if': {'column_id': '動畫名'}, 'width': '190px'}, {'if': {'column_id': '年份'}, 'width': '75px'}, {'if': {'column_id': '月份'}, 'width': '75px'}, {'if': {'column_id': '集數'}, 'width': '75px'}, {'if': {'column_id': '星級'}, 'width': '75px'}, {'if': {'column_id': '評分人數'}, 'width': '50px'}, {'if': {'column_id': '導演監督'}, 'width': '80px'}, {'if': {'column_id': '製作廠商'}, 'width': '85px'}, {'if': {'column_id': '作品分類1'}, 'width': '50px'}, {'if': {'column_id': '作品分類2'}, 'width': '50px'}, {'if': {'column_id': '作品分類3'}, 'width': '50px'}, {'if': {'column_id': '作品分類4'}, 'width': '50px'}, {'if': {'column_id': '作品分類5'}, 'width': '50px'}, {'if': {'column_id': '作品分類6'}, 'width': '50px'}, {'if': {'column_id': '原作載體'}, 'width': '50px'}, {'if': {'column_id': '新續作'}, 'width': '65px'}, {'if': {'column_id': '平均觀看數(萬)'}, 'width': '75px'}, {'if': {'column_id': '總觀看數(萬)'}, 'width': '75px'}],
+                        {'if': {'column_id': '動畫名'}, 'width': '190px'}, {'if': {'column_id': '年份'}, 'width': '75px'}, {'if': {'column_id': '月份'}, 'width': '75px'}, {'if': {'column_id': '集數'}, 'width': '75px'}, {'if': {'column_id': '星級'}, 'width': '70px'}, {'if': {'column_id': '評分人數'}, 'width': '70px'}, {'if': {'column_id': '導演監督'}, 'width': '70px'}, {'if': {'column_id': '製作廠商'}, 'width': '85px'}, {'if': {'column_id': '作品分類1'}, 'width': '50px'}, {'if': {'column_id': '作品分類2'}, 'width': '50px'}, {'if': {'column_id': '作品分類3'}, 'width': '50px'}, {'if': {'column_id': '作品分類4'}, 'width': '50px'}, {'if': {'column_id': '作品分類5'}, 'width': '50px'}, {'if': {'column_id': '作品分類6'}, 'width': '50px'}, {'if': {'column_id': '原作載體'}, 'width': '50px'}, {'if': {'column_id': '新續作'}, 'width': '50px'}, {'if': {'column_id': '平均觀看數(萬)'}, 'width': '70px'}, {'if': {'column_id': '總觀看數(萬)'}, 'width': '70px'}],
                     page_size=8,
                     # style_table={'overflowY':'hidden'},
                     fixed_rows={'headers': True},
@@ -165,10 +156,5 @@ def selectedRow(selected_rows):
         # return [oneTable]
     return None, False
 
-
 selected_row = None
 page_current = 0
-
-
-if __name__ == "__main__":
-    dash2.run(host='127.0.0.1', port=8050, debug=True)
