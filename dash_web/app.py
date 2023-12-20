@@ -1,34 +1,51 @@
-from dash import Dash, html, dash_table, dcc, callback, Output, Input
+import dash
 import dash_bootstrap_components as dbc
-import plotly.express as px
-import pandas as pd
+from dash import Dash, html, dcc
 
-df1 = pd.read_csv('./web_csv/genre_table.csv')
-df2 = pd.read_csv('./web_csv/Tags_View_Number.csv')
-df3 = pd.read_csv('./web_csv/genre2_table.csv')
+app = Dash(__name__, use_pages=True, title='動畫觀看數統計', external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-app = Dash(__name__, title='動畫觀看數統計', external_stylesheets=[dbc.themes.BOOTSTRAP])
+# the style arguments for the sidebar. We use position:fixed and a fixed width
+SIDEBAR_STYLE = {
+    "position": "fixed",
+    "top": 0,
+    "left": 0,
+    "bottom": 0,
+    "width": "16rem",
+    "padding": "2rem 1rem",
+    "background-color": "#f8f9fa",
+}
 
+# the styles for the main content position it to the right of the sidebar and
+# add some padding.
+CONTENT_STYLE = {
+    "margin-left": "18rem",
+    "margin-right": "2rem",
+    "padding": "2rem 1rem",
+}
+
+sidebar = html.Div(
+    [
+        dbc.Nav(
+            [
+                dbc.NavLink("Home", href="/", active="exact"),
+                dbc.NavLink("Page 1", href="/page-1", active="exact"),
+                dbc.NavLink("Page 2", href="/page-2", active="exact"),
+            ],
+            vertical=True,
+            pills=True,
+        ),
+    ],
+    style=SIDEBAR_STYLE,
+)
 
 app.layout = html.Div([
-    html.H1(children='影響觀看數因子', style={'textAlign':'center'}),
-    dcc.Dropdown(['作品分類(全部)','作品分類(代表性)','原創改編、新續作'], '作品分類(全部)', id='dropdown-selection'),
-    dash_table.DataTable(data=df1.to_dict('records'), page_size=10, id='main_table'),
-    dcc.Graph(id='graph-content'),
-    
-],className='container-lg')
+    html.Div([
+        html.Div(
+            dcc.Link(f"{page['name']} - {page['path']}", href=page["relative_path"])
+        ) for page in dash.page_registry.values()
+    ]),
+    dash.page_container
+])
 
-@callback(
-    [Output('main_table', 'data')],
-    Input('dropdown-selection', 'value')
-)
-def csv_toggle(value):
-    global df1, df2, df3
-    if value == '作品分類(全部)':
-        return df1.to_dict('records'), 
-    if value == '作品分類(代表性)':
-        return df2.to_dict('records'), 
-    if value == '原創改編、新續作':
-        return df3.to_dict('records'),
 if __name__ == '__main__':
     app.run(debug=True)
