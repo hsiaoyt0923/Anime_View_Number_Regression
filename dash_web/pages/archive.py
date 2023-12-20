@@ -1,13 +1,12 @@
 import dash
-from dash import Dash, html, dash_table, Input, Output, callback, dcc, State
+from dash import html, dash_table, Input, Output, callback
 import pandas as pd
 import dash_bootstrap_components as dbc
-import pandas as pd
 import base64
 
+dash.register_page(__name__)
 
 image_filename = './assets/suraimu.png'
-
 
 def b64_image(image_filename):
     with open(image_filename, 'rb') as f:
@@ -15,10 +14,8 @@ def b64_image(image_filename):
     return 'data:image/png;base64,' + base64.b64decode(image).decode('utf-8')
 
 
-dash2 = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
-dash2.title = "BaHaMutAnime"
-df = pd.read_csv('BaHaMut_9.csv')
-dash2.layout = html.Div(
+df = pd.read_csv('web_csv/BaHaMut_9.csv')
+layout = html.Div(
     [
 
         html.Div([

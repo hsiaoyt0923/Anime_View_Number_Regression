@@ -1,47 +1,85 @@
 import dash
+from dash import Dash, html, dash_table, dcc, callback, Output, Input
 import dash_bootstrap_components as dbc
-from dash import Dash, html, dcc
+import plotly.express as px
+import pandas as pd
 
-app = Dash(__name__, use_pages=True, title='動畫觀看數統計', external_stylesheets=[dbc.themes.BOOTSTRAP])
+df1 = pd.read_csv('./web_csv/Genre.csv')
+df2 = pd.read_csv('./web_csv/Genre_Only.csv')
+df3 = pd.read_csv('./web_csv/Tags.csv')
+df4 = pd.read_csv('./web_csv/Anime_Company.csv')
 
-# the style arguments for the sidebar. We use position:fixed and a fixed width
-SIDEBAR_STYLE = {
-    "position": "fixed",
-    "top": 0,
-    "left": 0,
-    "bottom": 0,
-    "width": "16rem",
-    "padding": "2rem 1rem",
-    "background-color": "#f8f9fa",
-}
 
-# the styles for the main content position it to the right of the sidebar and
-# add some padding.
-CONTENT_STYLE = {
-    "margin-left": "18rem",
-    "margin-right": "2rem",
-    "padding": "2rem 1rem",
-}
-
-sidebar = html.Div(
-    [
-        dbc.Nav(
-            [
-                dbc.NavLink("首頁", href="/", active="exact"),
-                dbc.NavLink("統計圖表", href="/analysis", active="exact"),
-                dbc.NavLink("資料集", href="/archive", active="exact"),
-            ],
-            vertical=True,
-            pills=True,
-        ),
-    ],
-    style=SIDEBAR_STYLE,
-)
+app = Dash(__name__, title='動畫觀看數統計', external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 app.layout = html.Div([
-    sidebar,
-    dash.page_container
-])
+    html.H1(children='影響觀看數因子', style={
+            'textAlign': 'center', 'margin-bottom': '1rem'}),
+    dcc.Dropdown(['作品分類(全部)', '作品分類(代表性)', '原創改編、新續作', '動畫公司'],
+                 '作品分類(全部)', id='dropdown-selection'),
+    dash_table.DataTable(style_table={
+                            'width': '100%',     # Set fixed width of the table
+                            'height': '350px',
+                            'overflowY': 'auto'
+                        },
+                        style_cell={
+                            'whiteSpace': 'normal',  # Allow text wrapping
+                            'textAlign': 'center'      # Align text to the left
+                        },
+                        style_header={
+                            'whiteSpace': 'normal',  # Allow header text wrapping
+                        },
+                         style_cell_conditional=[{'if': {'column_id': '動畫公司'}, 'width': '120px'}],
+                         sort_action='native',
+                         page_size=10,
+                         id='main_table'),
+    dcc.Graph(id='graph1'),
+    dcc.Graph(id='graph2'),
+    dcc.Graph(id='graph3'),
+], className='container-lg')
+
+
+@callback(
+    [Output('main_table', 'data'), Output('main_table', 'columns'),
+     Output('graph1', 'figure'), Output('graph2', 'figure'), Output('graph3', 'figure')],
+    Input('dropdown-selection', 'value')
+)
+def update_graph(value):
+    global df1, df2, df3, df4
+    if value == '作品分類(全部)':
+        data = df1.to_dict('records')
+        column = [{'id': column, 'name': column} for column in df1.columns]
+        fig1 = px.bar(df1, x='標籤', y=['全部作品數', '前25%作品數'], barmode='overlay')
+        fig1.update_layout(yaxis={'title': '作品數'})
+        fig2 = px.bar(df1, x='標籤', y=['最高(萬)', '中位數(萬)'], barmode='overlay')
+        fig2.update_layout(yaxis={'title': '平均觀看數(萬)'})
+        return data, column, fig1, fig2, None
+    if value == '作品分類(代表性)':
+        data = df2.to_dict('records')
+        column = [{'id': column, 'name': column} for column in df2.columns]
+        fig1 = px.bar(df2, x='標籤', y=['全部作品數', '前25%作品數'], barmode='overlay')
+        fig1.update_layout(yaxis={'title':'作品數'})
+        fig2 = px.bar(df2, x='標籤', y=['最高(萬)', '中位數(萬)'], barmode='overlay')
+        fig2.update_layout(yaxis={'title': '平均觀看數(萬)'})
+        fig3 = px.pie(df2, values='占全部作品比例(%)', names='標籤', title='各標籤占全部作品比例(%)')
+        return data, column, fig1, fig2, fig3
+    if value == '原創改編、新續作':
+        data = df3.to_dict('records')
+        column = [{'id': column, 'name': column} for column in df3.columns]
+        fig1 = px.bar(df3, x='標籤', y=['全部作品數', '前25%作品數'], barmode='overlay')
+        fig1.update_layout(yaxis={'title': '作品數'})
+        fig2 = px.bar(df3, x='標籤', y=['最高(萬)', '中位數(萬)'], barmode='overlay')
+        fig2.update_layout(yaxis={'title': '平均觀看數(萬)'})
+        fig3 = px.pie(df3, values='占全部作品比例(%)', names='標籤', title='各標籤占全部作品比例(%)')
+        return data, column, fig1, fig2, fig3
+    if value == '動畫公司':
+        data = df4.to_dict('records')
+        column = [{'id': column, 'name': column} for column in df4.columns]
+        fig1 = px.bar(df4[df4['全部作品數']>=3], x='動畫公司', y=['全部作品數', '前25%作品數'], barmode='overlay')
+        fig1.update_layout(yaxis={'title': '作品數'})
+        fig2 = px.bar(df4[df4['全部作品數'] >= 3], x='動畫公司', y=['最高(萬)', '中位數(萬)'], barmode='overlay')
+        fig2.update_layout(yaxis={'title': '平均觀看數(萬)'})
+        return data, column, fig1, fig2, None
 
 if __name__ == '__main__':
     app.run(debug=True)
