@@ -7,5 +7,6 @@ requests
 beautifulsoup4
 flask
 dash
+dash-bootstrap-components
 psycopg2-binary
 fake_useragent
