@@ -35,13 +35,12 @@ app.layout = html.Div([
                          id='main_table'),
     dcc.Graph(id='graph1'),
     dcc.Graph(id='graph2'),
-    dcc.Graph(id='graph3'),
 ], className='container-lg')
 
 
 @callback(
     [Output('main_table', 'data'), Output('main_table', 'columns'),
-     Output('graph1', 'figure'), Output('graph2', 'figure'), Output('graph3', 'figure')],
+    Output('graph1', 'figure'), Output('graph2', 'figure')],
     Input('dropdown-selection', 'value')
 )
 def update_graph(value):
@@ -53,7 +52,7 @@ def update_graph(value):
         fig1.update_layout(yaxis={'title': '作品數'})
         fig2 = px.bar(df1, x='標籤', y=['最高(萬)', '中位數(萬)'], barmode='overlay')
         fig2.update_layout(yaxis={'title': '平均觀看數(萬)'})
-        return data, column, fig1, fig2, None
+        return data, column, fig1, fig2
     if value == '作品分類(代表性)':
         data = df2.to_dict('records')
         column = [{'id': column, 'name': column} for column in df2.columns]
@@ -61,8 +60,7 @@ def update_graph(value):
         fig1.update_layout(yaxis={'title':'作品數'})
         fig2 = px.bar(df2, x='標籤', y=['最高(萬)', '中位數(萬)'], barmode='overlay')
         fig2.update_layout(yaxis={'title': '平均觀看數(萬)'})
-        fig3 = px.pie(df2, values='占全部作品比例(%)', names='標籤', title='各標籤占全部作品比例(%)')
-        return data, column, fig1, fig2, fig3
+        return data, column, fig1, fig2
     if value == '原創改編、新續作':
         data = df3.to_dict('records')
         column = [{'id': column, 'name': column} for column in df3.columns]
@@ -70,8 +68,7 @@ def update_graph(value):
         fig1.update_layout(yaxis={'title': '作品數'})
         fig2 = px.bar(df3, x='標籤', y=['最高(萬)', '中位數(萬)'], barmode='overlay')
         fig2.update_layout(yaxis={'title': '平均觀看數(萬)'})
-        fig3 = px.pie(df3, values='占全部作品比例(%)', names='標籤', title='各標籤占全部作品比例(%)')
-        return data, column, fig1, fig2, fig3
+        return data, column, fig1, fig2
     if value == '動畫公司':
         data = df4.to_dict('records')
         column = [{'id': column, 'name': column} for column in df4.columns]
@@ -79,7 +76,7 @@ def update_graph(value):
         fig1.update_layout(yaxis={'title': '作品數'})
         fig2 = px.bar(df4[df4['全部作品數'] >= 3], x='動畫公司', y=['最高(萬)', '中位數(萬)'], barmode='overlay')
         fig2.update_layout(yaxis={'title': '平均觀看數(萬)'})
-        return data, column, fig1, fig2, None
+        return data, column, fig1, fig2
 
 if __name__ == '__main__':
     app.run(debug=True)
