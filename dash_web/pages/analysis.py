@@ -38,9 +38,8 @@ layout = html.Div([
                         id='main_table'),
     dcc.Graph(id='graph1'),
     dcc.Graph(id='graph2'),
-    html.Div([],
-             id='pie')
-    ], className='container-lg pt-3')
+    ],
+    className='container-lg pt-3')
 
 
 @callback(
@@ -93,4 +92,4 @@ def pie_chart(value):
     global df2, df3
     if value == '作品分類(代表性)':
         pie = px.pie(df2, values='占全部作品比例(%)', title='各類型作品占比')
-        return 
+        return (pie)
