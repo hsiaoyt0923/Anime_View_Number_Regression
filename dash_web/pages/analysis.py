@@ -74,6 +74,7 @@ def update_graph(value):
         fig2.update_layout(xaxis={'title': '平均觀看數(萬)'})
         style = {'display':'block'}
         fig3 = px.pie(df2, values='占全部作品比例(%)', names='標籤', title='各標籤作品占比')
+        print(fig3)
         return data, column, fig1, fig2, style, fig3
     if value == '原創改編、新續作':
         data = df3.to_dict('records')
