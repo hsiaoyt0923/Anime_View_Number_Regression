@@ -9,15 +9,13 @@ dash.register_page(__name__,
 layout = html.Div([
     html.Div(
         [html.Div([
-            html.Div([
+            html.Div(html.Div([
                 html.H1('動畫觀看數統計'),
                 html.H2('以巴哈姆特動畫瘋為例'),
                 html.H3('組員:蕭翊廷 周華相'),
-            ],className='textbox',
-            ),
+            ],className='textbox')
+            ,className='bgbox'),
             html.Div([html.Video(src='./assets/video/oshinoko.mp4',
-                                width='700',
-                                height='100%',
                                 autoPlay=True,
                                 loop=True,
                                 muted=False,
@@ -30,12 +28,10 @@ layout = html.Div([
         style={
             'position':'relative',
             'display':'flex',
-            'justify-content':'space-between',
             'height':'800',
             'width':'100%',
         })
     ],
     style={
-        'padding': '200px 0',
-    },className="container-lg child_box")
-    ],className='bgbox')
+    },className="child_box")
+    ])

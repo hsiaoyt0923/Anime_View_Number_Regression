@@ -1,5 +1,7 @@
 .textbox{
-    margin-right: 50px;
+    width: 450px;
+    height: 400px;
+    margin:0 auto;
 }
 .textbox h2{
     margin-bottom: 240px;
@@ -7,28 +9,36 @@
 }
 
 .video{
+    height: 400px;
+    width: 700px;
     z-index: 1;
     position: absolute;
-    top: 0;
-    right:0;
+    top: 200px;
+    right:240px;
 }
 .shadow_box{
     width: 700px;
     height: 390px;
     box-shadow: 10px 30px 10px #666;
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 200px;
+    right: 240px;
     z-index: -1;
+}
+
+.bgbox{
+    width: 724px;
+    height: 918px;
+    padding-top: 200px;
 }
 
 .bgbox::before {
     content: "";
     display: block;
     background-image: url(./images/stage1.jpg);
-    background-size: auto 1024px;
+    background-size: 724px 918px;
     background-repeat: no-repeat;
-    height: 1000px;
+    height: 918px;
     width: 100%;
     opacity: 0.5;
     position: absolute;
