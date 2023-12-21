@@ -3,9 +3,9 @@ from dash import Dash, html
 import dash_bootstrap_components as dbc
 
 
-app = Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.BOOTSTRAP])
+dash_app = Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-app.layout = html.Div(
+dash_app.layout = html.Div(
     [
         dbc.NavbarSimple(
             children=[
@@ -23,4 +23,4 @@ app.layout = html.Div(
 )
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    dash_app.run(debug=True)
