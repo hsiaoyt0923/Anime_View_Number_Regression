@@ -83,13 +83,3 @@ def update_graph(value):
                       '最高(萬)', '中位數(萬)'], barmode='overlay')
         fig2.update_layout(yaxis={'title': '平均觀看數(萬)'})
         return data, column, fig1, fig2
-
-@callback(
-    Output('pie', 'children'),
-    Input('dropdown-selection', 'value')
-)
-def pie_chart(value):
-    global df2, df3
-    if value == '作品分類(代表性)':
-        pie = px.pie(df2, values='占全部作品比例(%)', title='各類型作品占比')
-        return (pie)
