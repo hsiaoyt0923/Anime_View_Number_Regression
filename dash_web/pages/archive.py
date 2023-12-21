@@ -26,6 +26,8 @@ layout = html.Div(
                              for column in df.columns],
                     sort_action='native',  # 启用原生排序功能
                     sort_mode='multi',
+                    style_table={'overflowY': 'auto',
+                                 'height': '500px',},
                     style_cell={'whiteSpace': 'normal',
                                 'textAlign': 'center'},
                     style_cell_conditional=[
@@ -38,7 +40,8 @@ layout = html.Div(
             ], className="main")
         ],
             className="main-row",
-            style={"paddingTop": '2rem'}),
+            style={"paddingTop": '5rem',
+                   "marginBottom":"2rem"}),
 
         html.Div([
             html.Div([

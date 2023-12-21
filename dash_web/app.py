@@ -16,6 +16,7 @@ app.layout = html.Div(
             brand="動畫觀看數統計_以巴哈姆特動畫瘋為例",
             color="success",
             dark=True,
+            className='fixed-top'
         ),
         dash.page_container,
     ]

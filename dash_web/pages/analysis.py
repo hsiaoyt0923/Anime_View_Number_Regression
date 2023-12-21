@@ -19,6 +19,7 @@ layout = html.Div([
                                     }),
     dcc.Dropdown(['作品分類(全部)', '作品分類(代表性)', '原創改編、新續作', '動畫公司'],
                  '作品分類(全部)',
+                 clearable=False,
                  id='dropdown-selection',
                  ),
     dash_table.DataTable(style_table={
@@ -125,20 +126,13 @@ def update_pie(value):
         fig.add_trace(go.Pie(labels=df['標籤'], values=df['前25%作品數'], name="前25%作品"), 1, 2)
         fig.update_traces(hole=.4, hoverinfo="label+percent")
         fig.update_layout(
-        title_text="各類型作品占比",
+        title_text="原作載體占比",
         annotations=[dict(text='所有作品', x=0.19, y=0.5, font_size=20, showarrow=False),
                     dict(text='前25%作品', x=0.82, y=0.5, font_size=20, showarrow=False)])
         return style, fig
     if value == '動畫公司':
-        style = {'display':'block'}
-        fig = make_subplots(rows=1, cols=2, specs=[[{'type':'domain'}, {'type':'domain'}]])
-        fig.add_trace(go.Pie(labels=df4['標籤'], values=df4['全部作品數'], name="所有作品"), 1, 1)
-        fig.add_trace(go.Pie(labels=df4['標籤'], values=df4['前25%作品數'], name="前25%作品"), 1, 2)
-        fig.update_traces(hole=.4, hoverinfo="label+percent")
-        fig.update_layout(
-        title_text="各類型作品占比",
-        annotations=[dict(text='所有作品', x=0.19, y=0.5, font_size=20, showarrow=False),
-                    dict(text='前25%作品', x=0.82, y=0.5, font_size=20, showarrow=False)])
+        style = {'display':'None'}
+        fig = px.pie()
         return style, fig
 
 @callback(
@@ -162,7 +156,7 @@ def update_pie2(value):
         fig.add_trace(go.Pie(labels=df['標籤'], values=df['前25%作品數'], name="前25%作品"), 1, 2)
         fig.update_traces(hole=.4, hoverinfo="label+percent")
         fig.update_layout(
-        title_text="各類型作品占比",
+        title_text="新續作占比",
         annotations=[dict(text='所有作品', x=0.19, y=0.5, font_size=20, showarrow=False),
                     dict(text='前25%作品', x=0.82, y=0.5, font_size=20, showarrow=False)])
         return style, fig
