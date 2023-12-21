@@ -2,10 +2,10 @@
     width: 450px;
     height: 400px;
     margin:0 auto;
+    color: #fff;
 }
 .textbox h2{
     margin-bottom: 240px;
-
 }
 
 .video{
@@ -40,13 +40,14 @@
     background-repeat: no-repeat;
     height: 918px;
     width: 100%;
-    opacity: 0.5;
+    opacity: 0.7;
     position: absolute;
     /* 偏移值皆設為 0，讓僞元素跟父元素一樣大小 */
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: -10;
 }
 
 .child_box{
