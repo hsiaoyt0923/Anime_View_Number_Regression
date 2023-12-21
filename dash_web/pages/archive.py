@@ -95,7 +95,6 @@ layout = html.Div(
 )
 def selectedRow(selected_rows):
     if len(selected_rows) != 0:
-        print(df.iloc[selected_rows[0]][0])
         oneSite: pd.DataFrame = df.iloc[[selected_rows[0]]],
         oneSite = oneSite[0]
         if df.iloc[selected_rows[0]][0] == '關於我轉生變成史萊姆這檔事 第二季':
