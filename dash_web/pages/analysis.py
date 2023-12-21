@@ -12,29 +12,35 @@ df4 = pd.read_csv('./web_csv/Anime_Company.csv')
 
 layout = html.Div([
     html.H1(children='關鍵因子', style={
-            'textAlign': 'center', 'margin-bottom': '1rem'}),
+                                    'textAlign': 'center',
+                                    'margin-bottom': '1rem'
+                                    }),
     dcc.Dropdown(['作品分類(全部)', '作品分類(代表性)', '原創改編、新續作', '動畫公司'],
-                 '作品分類(全部)', id='dropdown-selection'),
+                 '作品分類(全部)',
+                 id='dropdown-selection'),
     dash_table.DataTable(style_table={
-        'width': '100%',     # Set fixed width of the table
-        'height': '350px',
-        'overflowY': 'auto'
-    },
-        style_cell={
-        'whiteSpace': 'normal',  # Allow text wrapping
-        'textAlign': 'center'      # Align text to the left
-    },
-        style_header={
-        'whiteSpace': 'normal',  # Allow header text wrapping
-    },
-        style_cell_conditional=[
-            {'if': {'column_id': '動畫公司'}, 'width': '120px'}],
-        sort_action='native',
-        page_size=10,
-        id='main_table'),
+                            'width': '100%',     
+                            'height': '350px',
+                            'overflowY': 'auto'
+                        },
+                        style_cell={
+                            'whiteSpace': 'normal',  # 允許表格內容變多行
+                            'textAlign': 'center'
+                        },
+                        style_header={
+                            'whiteSpace': 'normal',  # 允許表頭內容變多行
+                        },
+                        style_cell_conditional=[
+                            {'if': {'column_id': '動畫公司'}, 'width': '120px'}
+                            ],
+                        sort_action='native',
+                        page_size=10,
+                        id='main_table'),
     dcc.Graph(id='graph1'),
     dcc.Graph(id='graph2'),
-], className='container-lg pt-3')
+    html.Div([],
+             id='pie')
+    ], className='container-lg pt-3')
 
 
 @callback(
@@ -78,3 +84,13 @@ def update_graph(value):
                       '最高(萬)', '中位數(萬)'], barmode='overlay')
         fig2.update_layout(yaxis={'title': '平均觀看數(萬)'})
         return data, column, fig1, fig2
+
+@callback(
+    Output('pie', 'children'),
+    Input('dropdown-selection', 'value')
+)
+def pie_chart(value):
+    global df2, df3
+    if value == '作品分類(代表性)':
+        pie = px.pie(df2, values='占全部作品比例(%)', title='各類型作品占比')
+        return 
