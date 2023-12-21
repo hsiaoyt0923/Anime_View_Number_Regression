@@ -17,7 +17,8 @@ layout = html.Div([
                                     }),
     dcc.Dropdown(['作品分類(全部)', '作品分類(代表性)', '原創改編、新續作', '動畫公司'],
                  '作品分類(全部)',
-                 id='dropdown-selection'),
+                 id='dropdown-selection',
+                 ),
     dash_table.DataTable(style_table={
                             'width': '100%',     
                             'height': '350px',
@@ -36,15 +37,21 @@ layout = html.Div([
                         sort_action='native',
                         page_size=10,
                         id='main_table'),
-    dcc.Graph(id='graph1'),
-    dcc.Graph(id='graph2'),
+    dcc.Graph(style={'height': '800px'},
+              id='graph1'),
+    dcc.Graph(style={'height': '800px'},
+              id='graph2'),
+    html.Div([
+        dcc.Graph(id='graph3'),
+        ],
+        id='pie'),
     ],
-    className='container-lg pt-3')
+    className='container-lg pt-2')
 
 
 @callback(
     [Output('main_table', 'data'), Output('main_table', 'columns'),
-     Output('graph1', 'figure'), Output('graph2', 'figure')],
+     Output('graph1', 'figure'), Output('graph2', 'figure'), Output('pie', 'style'), Output('graph3', 'figure')],
     Input('dropdown-selection', 'value')
 )
 def update_graph(value):
@@ -52,34 +59,38 @@ def update_graph(value):
     if value == '作品分類(全部)':
         data = df1.to_dict('records')
         column = [{'id': column, 'name': column} for column in df1.columns]
-        fig1 = px.bar(df1, x='標籤', y=['全部作品數', '前25%作品數'], barmode='overlay')
-        fig1.update_layout(yaxis={'title': '作品數'})
-        fig2 = px.bar(df1, x='標籤', y=['最高(萬)', '中位數(萬)'], barmode='overlay')
-        fig2.update_layout(yaxis={'title': '平均觀看數(萬)'})
-        return data, column, fig1, fig2
+        fig1 = px.bar(df1, x=['全部作品數','前25%作品數'], y='標籤', orientation='h', barmode='overlay')
+        fig1.update_layout(xaxis={'title': '作品數'})
+        fig2 = px.bar(df1, x=['最高(萬)','中位數(萬)'], y='標籤', orientation='h', barmode='overlay')
+        fig2.update_layout(xaxis={'title': '平均觀看數(萬)'})
+        style = {'display':'None'}
+        return data, column, fig1, fig2, style, None
     if value == '作品分類(代表性)':
         data = df2.to_dict('records')
         column = [{'id': column, 'name': column} for column in df2.columns]
-        fig1 = px.bar(df2, x='標籤', y=['全部作品數', '前25%作品數'], barmode='overlay')
-        fig1.update_layout(yaxis={'title': '作品數'})
-        fig2 = px.bar(df2, x='標籤', y=['最高(萬)', '中位數(萬)'], barmode='overlay')
-        fig2.update_layout(yaxis={'title': '平均觀看數(萬)'})
-        return data, column, fig1, fig2
+        fig1 = px.bar(df2, x=['全部作品數','前25%作品數'], y='標籤', orientation='h', barmode='overlay')
+        fig1.update_layout(xaxis={'title': '作品數'})
+        fig2 = px.bar(df2, x=['最高(萬)','中位數(萬)'], y='標籤', orientation='h', barmode='overlay')
+        fig2.update_layout(xaxis={'title': '平均觀看數(萬)'})
+        style = {'display':'block'}
+        fig3 = px.pie(df2, values='占全部作品比例(%)', names='標籤', title='各標籤作品占比')
+        return data, column, fig1, fig2, style, fig3
     if value == '原創改編、新續作':
         data = df3.to_dict('records')
         column = [{'id': column, 'name': column} for column in df3.columns]
-        fig1 = px.bar(df3, x='標籤', y=['全部作品數', '前25%作品數'], barmode='overlay')
-        fig1.update_layout(yaxis={'title': '作品數'})
-        fig2 = px.bar(df3, x='標籤', y=['最高(萬)', '中位數(萬)'], barmode='overlay')
-        fig2.update_layout(yaxis={'title': '平均觀看數(萬)'})
-        return data, column, fig1, fig2
+        fig1 = px.bar(df3, x=['全部作品數','前25%作品數'], y='標籤', orientation='h', barmode='overlay')
+        fig1.update_layout(xaxis={'title': '作品數'})
+        fig2 = px.bar(df3, x=['最高(萬)','中位數(萬)'], y='標籤', orientation='h', barmode='overlay')
+        fig2.update_layout(xaxis={'title': '平均觀看數(萬)'})
+        style = {'display':'block'}
+        return data, column, fig1, fig2, style, None
     if value == '動畫公司':
         data = df4.to_dict('records')
         column = [{'id': column, 'name': column} for column in df4.columns]
-        fig1 = px.bar(df4[df4['全部作品數'] >= 3], x='動畫公司', y=[
-                      '全部作品數', '前25%作品數'], barmode='overlay')
-        fig1.update_layout(yaxis={'title': '作品數'})
-        fig2 = px.bar(df4[df4['全部作品數'] >= 3], x='動畫公司', y=[
-                      '最高(萬)', '中位數(萬)'], barmode='overlay')
-        fig2.update_layout(yaxis={'title': '平均觀看數(萬)'})
-        return data, column, fig1, fig2
+        fig1 = px.bar(df4[(df4.全部作品數 >= 3) & (df4['前25%作品數'] > 0)], x=['全部作品數', '前25%作品數'], y='動畫公司', orientation='h', barmode='overlay')
+        fig1.update_layout(xaxis={'title': '作品數'})
+        fig2 = px.bar(df4[(df4.全部作品數 >= 3) & (df4['前25%作品數'] > 0)], x=['最高(萬)', '中位數(萬)'], y='動畫公司', orientation='h', barmode='overlay')
+        fig2.update_layout(xaxis={'title': '平均觀看數(萬)'})
+        style = {'display':'None'}
+        return data, column, fig1, fig2, style, None
+    
