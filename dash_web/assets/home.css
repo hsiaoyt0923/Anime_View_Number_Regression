@@ -3,13 +3,14 @@
 }
 .textbox h2{
     margin-bottom: 240px;
+
 }
 
 .video{
     z-index: 1;
     position: absolute;
     top: 0;
-    right:50px;
+    right:0;
 }
 .shadow_box{
     width: 700px;
@@ -17,11 +18,27 @@
     box-shadow: 10px 30px 10px #666;
     position: absolute;
     top: 0;
-    right: 50px;
+    right: 0;
     z-index: -1;
 }
 
-.bgbox{
-    background-image: url('assets/images/stage.jpg');
+.bgbox::before {
+    content: "";
+    display: block;
+    background-image: url(./images/stage1.jpg);
+    background-size: auto 1024px;
+    background-repeat: no-repeat;
+    height: 1000px;
+    width: 100%;
+    opacity: 0.5;
+    position: absolute;
+    /* 偏移值皆設為 0，讓僞元素跟父元素一樣大小 */
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
+.child_box{
+    position: relative;
+}

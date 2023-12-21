@@ -6,7 +6,8 @@ dash.register_page(__name__,
                    title='動畫觀看數統計',
                    path='/')
 
-layout = html.Div(
+layout = html.Div([
+    html.Div(
         [html.Div([
             html.Div([
                 html.H1('動畫觀看數統計'),
@@ -29,9 +30,12 @@ layout = html.Div(
         style={
             'position':'relative',
             'display':'flex',
+            'justify-content':'space-between',
             'height':'800',
-        },className="container-lg")
+            'width':'100%',
+        })
     ],
     style={
         'padding': '200px 0',
-    },className="container-lg bgbox")
+    },className="container-lg child_box")
+    ],className='bgbox')
