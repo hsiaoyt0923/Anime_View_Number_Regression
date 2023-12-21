@@ -1,5 +1,5 @@
 import dash
-from dash import Dash, html, dash_table, dcc, callback, Output, Input
+from dash import Dash, html
 import dash_bootstrap_components as dbc
 
 
