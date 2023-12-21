@@ -75,8 +75,6 @@ def update_graph(value):
         fig1.update_layout(xaxis={'title': '作品數'})
         fig2 = px.bar(df2, x=['最高(萬)','中位數(萬)'], y='標籤', orientation='h', barmode='overlay')
         fig2.update_layout(xaxis={'title': '平均觀看數(萬)'})
-        style = {'display':'block'}
-        fig3 = px.pie(df2, values='占全部作品比例(%)', names='標籤', title='各標籤作品占比')
         return data, column, fig1, fig2
     if value == '原創改編、新續作':
         data = df3.to_dict('records')
@@ -102,11 +100,11 @@ def update_graph(value):
     Input('dropdown-selection', 'value')
 )
 def update_pie(value):
-    global df2, df3
+    global df2, df3, df4
     if value == '作品分類(全部)':
         style = {'display':'None'}
-        fig3 = px.pie()
-        return style, fig3
+        fig = px.pie()
+        return style, fig
     if value == '作品分類(代表性)':
         style = {'display':'block'}
         fig = make_subplots(rows=1, cols=2, specs=[[{'type':'domain'}, {'type':'domain'}]])
@@ -132,9 +130,16 @@ def update_pie(value):
                     dict(text='前25%作品', x=0.82, y=0.5, font_size=20, showarrow=False)])
         return style, fig
     if value == '動畫公司':
-        style = {'display':'None'}
-        fig3 = px.pie()
-        return style, fig3
+        style = {'display':'block'}
+        fig = make_subplots(rows=1, cols=2, specs=[[{'type':'domain'}, {'type':'domain'}]])
+        fig.add_trace(go.Pie(labels=df4['標籤'], values=df4['全部作品數'], name="所有作品"), 1, 1)
+        fig.add_trace(go.Pie(labels=df4['標籤'], values=df4['前25%作品數'], name="前25%作品"), 1, 2)
+        fig.update_traces(hole=.4, hoverinfo="label+percent")
+        fig.update_layout(
+        title_text="各類型作品占比",
+        annotations=[dict(text='所有作品', x=0.19, y=0.5, font_size=20, showarrow=False),
+                    dict(text='前25%作品', x=0.82, y=0.5, font_size=20, showarrow=False)])
+        return style, fig
 
 @callback(
     [Output('pie2', 'style'), Output('graph4', 'figure')],
