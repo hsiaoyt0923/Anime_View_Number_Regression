@@ -2,17 +2,8 @@ import dash
 from dash import html, dash_table, Input, Output, callback
 import pandas as pd
 import dash_bootstrap_components as dbc
-import base64
 
 dash.register_page(__name__, title='動畫觀看數統計')
-
-image_filename = './assets/suraimu.png'
-
-def b64_image(image_filename):
-    with open(image_filename, 'rb') as f:
-        image = f.read()
-    return 'data:image/png;base64,' + base64.b64decode(image).decode('utf-8')
-
 
 df = pd.read_csv('web_csv/BaHaMut_9.csv')
 layout = html.Div(
