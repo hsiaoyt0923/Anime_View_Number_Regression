@@ -143,12 +143,12 @@ def update_pie(value):
 def update_pie2(value):
     if value == '作品分類(全部)':
         style = {'display':'None'}
-        figg = px.pie()
-        return style, figg
+        fig = px.pie()
+        return style, fig
     if value == '作品分類(代表性)':
         style = {'display':'None'}
-        figg = px.pie()
-        return style, figg
+        fig = px.pie()
+        return style, fig
     if value == '原創改編、新續作':
         style = {'display':'block'}
         fig = make_subplots(rows=1, cols=2, specs=[[{'type':'domain'}, {'type':'domain'}]])
@@ -163,5 +163,5 @@ def update_pie2(value):
         return style, fig
     if value == '動畫公司':
         style = {'display':'None'}
-        figg = px.pie()
-        return style, figg
+        fig = px.pie()
+        return style, fig
