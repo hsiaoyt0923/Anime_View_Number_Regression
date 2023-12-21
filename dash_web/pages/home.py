@@ -10,18 +10,28 @@ layout = html.Div(
         [html.Div([
             html.Div([
                 html.H1('動畫觀看數統計'),
-                html.H2('以巴哈姆特動畫瘋為例',
-                        style={
-                            'margin-bottom':'150px'
-                        }),
+                html.H2('以巴哈姆特動畫瘋為例'),
                 html.H3('組員:蕭翊廷 周華相'),
-            ]),
-            html.Div(html.Img(src='assets/images/cat.jpg'))
+            ],className='textbox',
+            ),
+            html.Div([html.Video(src='./assets/video/oshinoko.mp4',
+                                width='700',
+                                height='100%',
+                                autoPlay=True,
+                                loop=True,
+                                muted=False,
+                                controls=True,
+                                className='video',
+                                ),
+                      html.Div(className='shadow_box'),
+            ])
         ],
         style={
+            'position':'relative',
             'display':'flex',
-            'justify-content':'space-evenly',
-            'align-items':'center',
-            'height':'800px',
+            'height':'800',
         },className="container-lg")
-    ])
+    ],
+    style={
+        'padding': '200px 0',
+    },className="container-lg bgbox")

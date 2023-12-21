@@ -1,0 +1,27 @@
+.textbox{
+    margin-right: 50px;
+}
+.textbox h2{
+    margin-bottom: 240px;
+}
+
+.video{
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    right:50px;
+}
+.shadow_box{
+    width: 700px;
+    height: 390px;
+    box-shadow: 10px 30px 10px #666;
+    position: absolute;
+    top: 0;
+    right: 50px;
+    z-index: -1;
+}
+
+.bgbox{
+    background-image: url('assets/images/stage.jpg');
+}
+
